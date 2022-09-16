@@ -1,1 +1,0 @@
-CREATE INDEX ts_idx ON essay USING GIN (ts);
