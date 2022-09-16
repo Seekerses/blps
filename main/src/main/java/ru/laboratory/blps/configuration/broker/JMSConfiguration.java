@@ -28,7 +28,7 @@ public class JMSConfiguration {
     @Bean
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.BYTES);
+        converter.setTargetType(MessageType.TEXT);
         return converter;
     }
 

@@ -29,23 +29,10 @@ public class JMSConfiguration {
 
     @Bean
     public MessageConverter jacksonJmsMessageConverter() {
-        return new MessageConverter(){
-            @Override
-            public Message toMessage(Object object, Session session) throws JMSException, MessageConversionException {
-                BytesMessage message = session.createBytesMessage();
-                if (object instanceof String){
-                    message.writeBytes(((String) object).getBytes());
-                } else if (object instanceof byte[]) {
-                    message.writeBytes((byte[]) object);
-                } else throw new IllegalArgumentException();
-                return message;
-            }
-
-            @Override
-            public Object fromMessage(Message message) throws JMSException, MessageConversionException {
-                return message;
-            }
-        };
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.BYTES);
+        converter.setTypeIdPropertyName("type_");
+        return converter;
     }
 
 }

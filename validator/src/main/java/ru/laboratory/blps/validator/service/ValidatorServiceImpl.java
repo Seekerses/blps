@@ -101,11 +101,8 @@ public class ValidatorServiceImpl implements ValidatorService {
 
     @JmsListener(destination = "test", containerFactory = "BLPSFactory")
     public void consumeRequest(BytesMessage msg){
-        byte[] body;
         try {
-            body = new byte[(int) msg.getBodyLength()];
-            msg.readBytes(body);
-            log.info(new String(body));
+            log.info(msg.getBody(byte[].class));
         } catch (JMSException e) {
             throw new RuntimeException(e);
         }

@@ -1,33 +1,26 @@
 package ru.laboratory.blps.essay.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.laboratory.blps.auth.User;
+import ru.laboratory.blps.auth.exceptions.UserNotFound;
+import ru.laboratory.blps.auth.service.UserService;
+import ru.laboratory.blps.configuration.broker.MqttPublisher;
 import ru.laboratory.blps.essay.Comment;
 import ru.laboratory.blps.essay.Essay;
 import ru.laboratory.blps.essay.Interaction;
 import ru.laboratory.blps.essay.dto.CommentCreateDTO;
 import ru.laboratory.blps.essay.dto.EssayUpdateDTO;
 import ru.laboratory.blps.essay.dto.EssayUploadDTO;
-import ru.laboratory.blps.essay.repository.EssayRepository;
 import ru.laboratory.blps.essay.factory.CommentFactory;
 import ru.laboratory.blps.essay.factory.EssayFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.laboratory.blps.auth.exceptions.UserNotFound;
-import ru.laboratory.blps.auth.service.UserService;
+import ru.laboratory.blps.essay.repository.EssayRepository;
 
 import javax.annotation.Resource;
-import javax.print.attribute.standard.Destination;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 @Service
 public class EssayServiceImpl implements EssayService{
-    private final MqttClient mqttClient;
+//    private final MqttPublisher.MQTTGateway gateway;
 
     private final EssayRepository repository;
     private final EssayFactory essayFactory;
@@ -118,16 +111,8 @@ public class EssayServiceImpl implements EssayService{
         return totalMark.get() / totalMarkCount.get();
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void publishTestMessage(){
-        MqttMessage message = new MqttMessage();
-        message.setPayload("Rising hope".getBytes());
-        message.setQos(2);
-        try {
-            mqttClient.publish("test", message);
-        }
-        catch (MqttException ex){
-            ex.printStackTrace();
-        }
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void publishTestMessage(){
+//        gateway.sendToMqtt("Raising Hope");
+//    }
 }
